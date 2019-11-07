@@ -23,3 +23,19 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
           workdir: clojure/openjdk-11-lein/node-browsers
+      - name: Build registry.hub.docker.com/superstructor/python:3.6.7
+        uses: elgohr/Publish-Docker-Github-Action@master
+        with:
+          name: superstructor/python:3.6.7
+          registry: registry.hub.docker.com
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          workdir: python/3.6.7
+      - name: Build docker.pkg.github.com/superstructor/dockerfiles/python:3.6.7
+        uses: elgohr/Publish-Docker-Github-Action@master
+        with:
+          name: superstructor/dockerfiles/python:3.6.7
+          registry: docker.pkg.github.com
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          workdir: python/3.6.7
