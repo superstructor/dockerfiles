@@ -8,7 +8,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: Build registry.hub.docker.com/superstructor/clojure:openjdk-11-lein-2.9.1-node-browser
-        uses: elgohr/Publish-Docker-Github-Action@v1
+        uses: elgohr/Publish-Docker-Github-Action@2.9
         with:
           name: superstructor/clojure:openjdk-11-lein-2.9.1-node-browser
           registry: registry.hub.docker.com
@@ -16,7 +16,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
           workdir: clojure/openjdk-11-lein/node-browsers
       - name: Build docker.pkg.github.com/superstructor/dockerfiles/clojure:openjdk-11-lein-2.9.1-node-browser
-        uses: elgohr/Publish-Docker-Github-Action@v1
+        uses: elgohr/Publish-Docker-Github-Action@2.9
         with:
           name: superstructor/dockerfiles/clojure:openjdk-11-lein-2.9.1-node-browser
           registry: docker.pkg.github.com
@@ -24,7 +24,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
           workdir: clojure/openjdk-11-lein/node-browsers
       - name: Build registry.hub.docker.com/superstructor/python:3.6.7
-        uses: elgohr/Publish-Docker-Github-Action@v1
+        uses: elgohr/Publish-Docker-Github-Action@2.9
         with:
           name: superstructor/python:3.6.7
           registry: registry.hub.docker.com
@@ -32,7 +32,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
           workdir: python/3.6.7
       - name: Build docker.pkg.github.com/superstructor/dockerfiles/python:3.6.7
-        uses: elgohr/Publish-Docker-Github-Action@v1
+        uses: elgohr/Publish-Docker-Github-Action@2.9
         with:
           name: superstructor/dockerfiles/python:3.6.7
           registry: docker.pkg.github.com
