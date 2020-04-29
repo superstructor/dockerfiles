@@ -18,6 +18,7 @@ RUN apt-get -qq update && \
     cd /usr/local/bin && \
     curl -fsSLo lein https://raw.githubusercontent.com/technomancy/leiningen/2.9.3/bin/lein && \
     chmod 755 lein && \
+    lein self-install && \
 
     cd - && \
     
