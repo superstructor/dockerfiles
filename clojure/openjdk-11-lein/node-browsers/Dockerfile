@@ -13,6 +13,11 @@ RUN /usr/bin/printf '\xfe\xed\xfe\xed\x00\x00\x00\x02\x00\x00\x00\x00\xe2\x68\x6
         /var/lib/dpkg/info/ca-certificates-java.postinst configure
 
 # Install compiler, pip3, awscli and phantomjs.
+#
+# PhantomJS is installed as a dependency of karma-runner/karma-phantomjs-launcher.
+# For example in day8/re-frame the phantomjs launcher is required for cljs-oss/canary
+# builds but is not used for the re-frame continuous integration itself as that
+# uses headless Chrome.
 RUN apt-get update && \
         apt-get install -y build-essential python3-pip && \
         pip3 install awscli && \
