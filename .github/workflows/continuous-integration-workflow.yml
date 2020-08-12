@@ -1,0 +1,13 @@
+name: ci
+on: [push]
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+      - working-directory: clojure
+        run: |
+          docker build --tag superstructor/clojure .
+          docker history superstructor/clojure

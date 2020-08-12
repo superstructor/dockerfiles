@@ -1,49 +1,30 @@
 name: cd
-on: [push]
+on:
+  push:
+    tags:
+      - "v[0-9]+.[0-9]+.[0-9]+"
 
 jobs:
   deploy:
-    name: deploy
+    name: Deploy
     runs-on: ubuntu-18.04
     steps:
-      - uses: actions/checkout@v1
-      - name: Build registry.hub.docker.com/superstructor/clojure:openjdk-11-lein-2.9.1-node-browsers
+      - uses: actions/checkout@v2
+      - name: Build registry.hub.docker.com/superstructor/clojure
         uses: elgohr/Publish-Docker-Github-Action@2.9
         with:
-          name: superstructor/clojure:openjdk-11-lein-2.9.1-node-browsers
+          name: superstructor/clojure
+          tag_semver: true
           registry: registry.hub.docker.com
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-          workdir: clojure/openjdk-11-lein/node-browsers
-      - name: Build docker.pkg.github.com/superstructor/dockerfiles/clojure:openjdk-11-lein-2.9.1-node-browsers
+          workdir: clojure
+      - name: Build docker.pkg.github.com/superstructor/clojure
         uses: elgohr/Publish-Docker-Github-Action@2.9
         with:
-          name: superstructor/dockerfiles/clojure:openjdk-11-lein-2.9.1-node-browsers
+          name: superstructor/clojure
+          tag_semver: true
           registry: docker.pkg.github.com
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-          workdir: clojure/openjdk-11-lein/node-browsers
-      - name: Build registry.hub.docker.com/superstructor/python:3.6.7
-        uses: elgohr/Publish-Docker-Github-Action@2.9
-        with:
-          name: superstructor/python:3.6.7
-          registry: registry.hub.docker.com
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-          workdir: python/3.6.7
-      - name: Build docker.pkg.github.com/superstructor/dockerfiles/python:3.6.7
-        uses: elgohr/Publish-Docker-Github-Action@2.9
-        with:
-          name: superstructor/dockerfiles/python:3.6.7
-          registry: docker.pkg.github.com
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-          workdir: python/3.6.7
-      - name: Build registry.hub.docker.com/superstructor/klipse:jdk-11-node-12-lumo-1.5-planck-2.25.0
-        uses: elgohr/Publish-Docker-Github-Action@2.9
-        with:
-          name: superstructor/klipse:jdk-11-node-12-lumo-1.5-planck-2.25.0
-          registry: registry.hub.docker.com
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-          workdir: klipse
+          workdir: clojure
