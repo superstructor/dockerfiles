@@ -85,7 +85,7 @@ RUN \
       zsh build-essential openjdk-$JVM_VERSION\-jdk-headless nodejs yarn python3-pip \
       pngnq pngquant pngtools pngmeta pngcrush pngcheck \
       jhead jpeginfo jpegoptim jpegpixi \
-      libglib2.0-0 libgconf-2-4 \
+      xvfb libglib2.0-0 libgconf-2-4 \
       popularity-contest && \
     rm -rf /var/lib/apt/lists/* && \
 
