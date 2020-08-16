@@ -89,7 +89,9 @@ RUN \
 
     # Install development tooling, common editors and language runtimes.
     apt-get install -q -y --no-install-recommends \
-      git jq silversearcher-ag ncdu htop rlwrap tmux openssh-client mosh \
+      git diffstat jq silversearcher-ag \
+      ncdu htop \
+      rlwrap tmux openssh-client mosh \
       neovim emacs-nox \
       zsh build-essential openjdk-$JVM_VERSION\-jdk-headless nodejs yarn python3-pip planck \
       pngnq pngquant pngtools pngmeta pngcrush pngcheck \
