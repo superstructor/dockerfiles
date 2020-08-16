@@ -10,21 +10,21 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2
-      - name: Build registry.hub.docker.com/superstructor/clojure
+      - name: Build registry.hub.docker.com/superstructor/dev-ci
         uses: elgohr/Publish-Docker-Github-Action@2.19
         with:
-          name: superstructor/clojure
+          name: superstructor/dev-ci
           tag_semver: true
           registry: registry.hub.docker.com
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-          workdir: clojure
-      - name: Build docker.pkg.github.com/superstructor/dockerfiles/clojure
+          workdir: dev-ci
+      - name: Build docker.pkg.github.com/superstructor/dockerfiles/dev-ci
         uses: elgohr/Publish-Docker-Github-Action@2.19
         with:
-          name: superstructor/dockerfiles/clojure
+          name: superstructor/dockerfiles/dev-ci
           tag_semver: true
           registry: docker.pkg.github.com
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-          workdir: clojure
+          workdir: dev-ci

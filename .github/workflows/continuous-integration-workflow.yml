@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2
-      - working-directory: clojure
+      - working-directory: dev-ci
         run: |
-          docker build --tag superstructor/clojure .
-          docker history superstructor/clojure
+          docker build --tag superstructor/dev-ci .
+          docker history superstructor/dev-ci
