@@ -175,6 +175,11 @@ RUN \
     chmod 0755 $BOOT_INSTALL/boot && \
     echo '\n\n' && \
 
+    # Install pipenv
+    echo "Installing pipenv..." && \
+    pip3 -q install pipenv && \
+    echo '\n\n' && \
+
     # Install AWS CLI
     echo "Installing AWS CLI..." && \
     pip3 -q install awscli && \
