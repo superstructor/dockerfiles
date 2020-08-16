@@ -332,7 +332,7 @@ RUN \
     #lein deps && \
     #rm project.clj && \
 
-    npm -g install \
+    npm install -g --unsafe-perm \
       lumo-cljs@$LUMO_VERSION \
       karma-cli@$KARMA_CLI_VERSION \
       diff-so-fancy@$DIFF_SO_FANCY_VERSION && \
