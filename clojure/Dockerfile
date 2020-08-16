@@ -34,6 +34,8 @@ RUN \
     export RIPGREP_SHA256SUM=18ef498312073da55d2f2f65c6a906085c68368a23c9a45a87fcb8539be96608 && \
     export EXA_VERSION=0.9.0 && \
     export EXA_SHA256SUM=53d8746b1ca2d945c5b75767edc83addfd1fe3c4a2b0b766c07172473330a50b && \
+    export WEBSOCAT_VERSION=1.6.0 && \
+    export WEBSOCAT_SHA256SUM=cfe30fb51ebbce16059315202dc55bc528e43b83fa2e20b2e9179a85f7f05c28 && \
     export POWERSHELL_MAJOR_VERSION=7 && \
     export POWERSHELL_VERSION=$POWERSHELL_MAJOR_VERSION.0.3 && \
     export POWERSHELL_SHA256SUM=a9c023940c77a96a9f5135309e44c93ed627983bb1a66ecf5beb42bbba54ead6 && \
@@ -260,6 +262,16 @@ RUN \
     echo "${EXA_SHA256SUM} *exa-linux-x86_64-${EXA_VERSION}.zip" | sha256sum -c - && \
     dpkg -i "exa-linux-x86_64-${EXA_VERSION}.zip" && \
     rm -f "exa-linux-x86_64-${EXA_VERSION}.zip" && \
+    echo '\n\n' && \
+
+    # Install websocat
+    echo "Installing websocat ${WEBSOCAT_VERSION}..." && \
+    wget -q "https://github.com/vi/websocat/releases/download/v${WEBSOCAT_VERSION}/websocat_${WEBSOCAT_VERSION}_ssl1.1_amd64.deb" && \
+    echo "Verifying websocat_${WEBSOCAT_VERSION}_ssl1.1_amd64.deb checksum..." && \
+    sha256sum "websocat_${WEBSOCAT_VERSION}_ssl1.1_amd64.deb" && \
+    echo "${WEBSOCAT_SHA256SUM} *websocat_${WEBSOCAT_VERSION}_ssl1.1_amd64.deb" | sha256sum -c - && \
+    dpkg -i "websocat_${WEBSOCAT_VERSION}_ssl1.1_amd64.deb" && \
+    rm -f "websocat_${WEBSOCAT_VERSION}_ssl1.1_amd64.deb" && \
     echo '\n\n' && \
 
     # Install Chrome
