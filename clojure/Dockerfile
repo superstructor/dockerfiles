@@ -111,6 +111,7 @@ RUN \
 
     # Start a X11 virtual framebuffer to run tests in Chrome.
     echo 'Xvfb :99 -screen 0 1920x1080x24 &\n' >> /docker-entrypoint.sh && \
+    echo 'export DISPLAY=:99\n' >> /docker-entrypoint.sh && \
 
     echo "echo \"`git --version`\"\n" >> /docker-entrypoint.sh && \
     echo "echo \"Node.js `node --version`\"\n" >> /docker-entrypoint.sh && \
@@ -374,6 +375,5 @@ RUN \
 
     echo "Done."
 
-ENV DISPLAY :99
 ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["/bin/bash"]
