@@ -121,8 +121,8 @@ RUN \
     curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash && \
 
     # Install Clojure:
-    wget https://download.clojure.org/install/linux-install-$CLOJURE_VERSION.sh && \
-    echo "Verifying Clojure installer checksum..." && \
+    wget -q https://download.clojure.org/install/linux-install-$CLOJURE_VERSION.sh && \
+    echo "Verifying linux-install-$CLOJURE_VERSION.sh checksum..." && \
     sha256sum linux-install-$CLOJURE_VERSION.sh && \
     echo "$CLOJURE_SHA256SUM *linux-install-$CLOJURE_VERSION.sh" | sha256sum -c - && \
     chmod +x linux-install-$CLOJURE_VERSION.sh && \
