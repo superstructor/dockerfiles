@@ -78,6 +78,10 @@ RUN \
     echo "deb https://dl.yarnpkg.com/debian/ stable main" > /etc/apt/sources.list.d/yarn.list && \
     curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
 
+    # Begin /docker-entrypoint.sh script. This is amended throughout the RUN
+    # command with additional lines.
+    echo '#!/bin/sh\n' > /docker-entrypoint.sh && \
+
     # Install development tooling, common editors and language runtimes.
     apt-get install -q -y --no-install-recommends \
       git jq silversearcher-ag ncdu htop rlwrap tmux openssh-client mosh \
@@ -85,13 +89,22 @@ RUN \
       zsh build-essential openjdk-$JVM_VERSION\-jdk-headless nodejs yarn python3-pip \
       pngnq pngquant pngtools pngmeta pngcrush pngcheck \
       jhead jpeginfo jpegoptim jpegpixi \
-    # xvfb is used as a virtual framebuffer to run tests in Chrome.
-    # The rest are dependencies of xvfb and/or Chrome. Unfortunately due to the
-    # old version of Chrome used (56.x) there is a dependency on old libraries
-    # like libgtk2.0-0 that take up a lot of extra space.
+    # These are dependencies of xvfb and/or Chrome. Unfortunately due to the old version of Chrome
+    # used (56.x) there is a dependency on old libraries like libgtk2.0-0 that take up a lot of
+    # extra space.
       xvfb libxcomposite1 libxcursor1 libxss1 libxrandr2 libgtk2.0-0 libgconf-2-4  \
+    # Voting in the popularity contest may help keep packages we use supported by Ubuntu.
       popularity-contest && \
     rm -rf /var/lib/apt/lists/* && \
+
+    # Start a X11 virtual framebuffer to run tests in Chrome.
+    echo 'Xvfb :99 -screen 0 1920x1080x24 &\n' >> /docker-entrypoint.sh && \
+
+    echo "echo \"`git --version`\"\n" >> /docker-entrypoint.sh && \
+    echo "echo \"Node.js `node --version`\"\n" >> /docker-entrypoint.sh && \
+    echo "echo \"NPM `npm --version`\"\n" >> /docker-entrypoint.sh && \
+    echo "echo \"Yarn `yarn --version`\"\n" >> /docker-entrypoint.sh && \
+    echo "echo \"`python3 --version`\"\n" >> /docker-entrypoint.sh && \
 
     # Install Git Large File Storage
     #
@@ -131,6 +144,7 @@ RUN \
     rm leiningen-$LEIN_VERSION-standalone.zip.asc && \
     mkdir -p /usr/share/java && \
     mv leiningen-$LEIN_VERSION-standalone.zip /usr/share/java/leiningen-$LEIN_VERSION-standalone.jar && \
+    echo "echo \"`lein version`\"\n" >> /docker-entrypoint.sh && \
 
     # Install Boot:
     mkdir -p $BOOT_INSTALL && \
@@ -224,17 +238,17 @@ RUN \
     echo "Verifying Chromium package checksum..." && \
     sha256sum chromium-linux.zip && \
     echo "$CHROMIUM_SHA256SUM *chromium-linux.zip" | sha256sum -c - && \
-    cd /opt && \
-    unzip -q /tmp/chromium-linux.zip && \
-    mv chrome-linux chromium-$CHROMIUM_VERSION && \
-    ln -sv chromium-$CHROMIUM_VERSION chromium && \
+    unzip -q chromium-linux.zip && \
+    mkdir -p /opt/chromium && \
+    mv chrome-linux /opt/chromium/$CHROMIUM_VERSION && \
+    ln -s /opt/chromium/$CHROMIUM_VERSION /opt/chromium/latest && \
+    ln -s /opt/chromium/latest/chrome-wrapper /usr/local/bin/chrome-wrapper && \
     # Fixes error on startup like:
     # 'ChromeHeadless stderr: [3284:3284:0816/000443:FATAL:zygote_host_impl_linux.cc(107)] No usable sandbox! Update your kernel...'
     #
     # TODO When upgrading Chrome: Verify that there are no changes to `chrome-wrapper` that would cause this to fail.
     sed -i 's|HERE/chrome"|HERE/chrome" --disable-setuid-sandbox --no-sandbox|g' \
-        /opt/chromium/chrome-wrapper && \
-    cd /tmp && \
+        /opt/chromium/$CHROMIUM_VERSION/chrome-wrapper && \
     rm chromium-linux.zip && \
 
     # Install older libraries required by older Chrome release (56.x).
@@ -289,11 +303,12 @@ RUN \
     echo "Verifying ChromeDriver package checksum..." && \
     sha256sum chromedriver_linux64.zip && \
     echo "$CHROMEDRIVER_SHA256SUM *chromedriver_linux64.zip" | sha256sum -c - && \
-    unzip chromedriver_linux64.zip && \
+    unzip -q chromedriver_linux64.zip && \
     rm -f chromedriver_linux64.zip && \
     mv chromedriver /usr/local/bin/chromedriver && \
     chmod +x /usr/local/bin/chromedriver && \
     chromedriver --version && \
+    echo "echo \"`chromedriver --version`\"\n" >> /docker-entrypoint.sh && \
 
     # Install PhantomJS
     #
@@ -304,9 +319,11 @@ RUN \
     sha256sum phantomjs.tar.bz2 && \
     echo "$PHANTOMJS_SHA256SUM *phantomjs.tar.bz2" | sha256sum -c - && \
     mkdir -p /opt/phantomjs/${PHANTOMJS_VERSION} && \
-    tar jxf phantomjs.tar.bz2 -C /opt/phantomjs/${PHANTOMJS_VERSION} && \
+    tar jxf phantomjs.tar.bz2 --strip-components=1 -C /opt/phantomjs/${PHANTOMJS_VERSION} && \
     rm -f phantomjs.tar.bz2 && \
-    ln -s /opt/phantomjs-${PHANTOMJS_VERSION}/bin/phantomjs /usr/local/bin/phantomjs && \
+    ln -s /opt/phantomjs/${PHANTOMJS_VERSION} /opt/phantomjs/latest && \
+    ln -s /opt/phantomjs/latest/bin/phantomjs /usr/local/bin/phantomjs && \
+    echo "echo \"PhantomJS `phantomjs --version`\"\n" >> /docker-entrypoint.sh && \
 
     # Install PowerShell
     #
@@ -322,9 +339,10 @@ RUN \
     rm -f powershell.tar.gz && \
     chmod +x /opt/microsoft/powershell/${POWERSHELL_MAJOR_VERSION}/pwsh && \
     ln -s /opt/microsoft/powershell/${POWERSHELL_MAJOR_VERSION}/pwsh /usr/local/bin/pwsh && \
+    echo "echo \"`pwsh --version`\"\n" >> /docker-entrypoint.sh && \
 
-    # Start xvfb automatically:
-    printf '#!/bin/sh\nXvfb :99 -screen 0 1920x1080x24 &\nexec "$@"\n' > /docker-entrypoint.sh && \
+    # Finish Docker ENTRYPOINT script:
+    echo 'exec "$@"\n' >> /docker-entrypoint.sh && \
     chmod +x /docker-entrypoint.sh && \
 
     # Pre-install common dependencies to improve build performance:
