@@ -50,11 +50,11 @@ RUN \
 
     cd /tmp && \
 
-    apt-get update -q && \
-    apt-get dist-upgrade -q -y && \
+    apt-get update -qq && \
+    apt-get dist-upgrade -qq -y && \
 
     # Install tools needed by the subsequent commands.
-    apt-get install -q -y --no-install-recommends \
+    apt-get install -qq -y --no-install-recommends \
         ca-certificates gnupg \
         curl wget \
         unzip && \
