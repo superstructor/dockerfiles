@@ -303,7 +303,7 @@ RUN \
     ln -s "/opt/pueue/${PUEUE_VERSION}" /opt/pueue/latest && \
     mv pueue-linux-x86_64 "/opt/pueue/${PUEUE_VERSION}/bin/pueue" && \
     mv pueued-linux-x86_64 "/opt/pueue/${PUEUE_VERSION}/bin/pueued" && \
-    chmod +x "/opt/pueue/${PUEUE_VERSION}/bin/pueue{,d}" && \
+    chmod +x "/opt/pueue/${PUEUE_VERSION}/bin/pueue" "/opt/pueue/${PUEUE_VERSION}/bin/pueued" && \
     ln -s /opt/pueue/latest/bin/* /usr/local/bin && \
     echo '\n\n' && \
 
