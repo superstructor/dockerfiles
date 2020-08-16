@@ -119,14 +119,8 @@ RUN \
     echo "echo \"Yarn `yarn --version`\"\n" >> /docker-entrypoint.sh && \
     echo "echo \"`python3 --version`\"\n" >> /docker-entrypoint.sh && \
 
-    # Install Git Large File Storage
-    #
-    # Required when cloning any Git repository that uses the Git LFS Specification.
-    #
-    # See https://github.com/git-lfs/git-lfs
-    curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash && \
-
     # Install Clojure:
+    echo "Installing 'Official' Clojure CLI ${CLOJURE_VERSION}..." && \
     wget -q https://download.clojure.org/install/linux-install-$CLOJURE_VERSION.sh && \
     echo "Verifying linux-install-$CLOJURE_VERSION.sh checksum..." && \
     sha256sum linux-install-$CLOJURE_VERSION.sh && \
@@ -137,6 +131,7 @@ RUN \
     clojure -e "(clojure-version)" && \
 
     # Install Leiningen:
+    echo "Installing Leiningen ${LEIN_VERSION}..." && \
     mkdir -p $LEIN_INSTALL && \
     # Once leiningen 2.9.5 is released replace the below git commit-based URL with the following version-based URL.
     # Leiningen 2.9.4 has a bug that was subsequently fixed but not released that causes a syntax error.
@@ -160,16 +155,18 @@ RUN \
     echo "echo \"`lein version`\"\n" >> /docker-entrypoint.sh && \
 
     # Install Boot:
+    echo "Installing Boot..." && \
     mkdir -p $BOOT_INSTALL && \
     wget -q https://github.com/boot-clj/boot-bin/releases/download/latest/boot.sh && \
-    echo "Verifying boot installer checksum..." && \
+    echo "Verifying boot.sh checksum..." && \
     sha256sum boot.sh && \
     echo "$BOOT_SHA256SUM *boot.sh" | sha256sum -c - && \
     mv boot.sh $BOOT_INSTALL/boot && \
     chmod 0755 $BOOT_INSTALL/boot && \
 
     # Install AWS CLI
-    pip3 install awscli && \
+    echo "Installing AWS CLI..." && \
+    pip3 -q install awscli && \
 
     # Install bat
     #
@@ -181,6 +178,7 @@ RUN \
     # 3. Run `sha256sum bat_VERSION_amd64.deb`
     # 4. Copy/paste the checksum to BAT_SHA256SUM in environment variables at the beginning of this RUN script
     # 5. Edit the BAT_VERSION in environment variables at the beginning of this RUN script
+    echo "Installing bat ${BAT_VERSION}..." && \
     wget -q https://github.com/sharkdp/bat/releases/download/v${BAT_VERSION}/bat_${BAT_VERSION}_amd64.deb && \
     echo "Verifying bat package checksum..." && \
     sha256sum bat_${BAT_VERSION}_amd64.deb && \
@@ -198,6 +196,7 @@ RUN \
     # 3. Run `sha256sum fd_VERSION_amd64.deb`
     # 4. Copy/paste the checksum to FD_SHA256SUM in environment variables at the beginning of this RUN script
     # 5. Edit the FD_VERSION in environment variables at the beginning of this RUN script
+    echo "Installing fd ${FD_VERSION}..." && \
     wget -q https://github.com/sharkdp/fd/releases/download/v${FD_VERSION}/fd_${FD_VERSION}_amd64.deb && \
     echo "Verifying fd package checksum..." && \
     sha256sum fd_${FD_VERSION}_amd64.deb && \
@@ -215,6 +214,7 @@ RUN \
     # 3. Run `sha256sum hexyl_VERSION_amd64.deb`
     # 4. Copy/paste the checksum to HEXYL_SHA256SUM in environment variables at the beginning of this RUN script
     # 5. Edit the HEXYL_VERSION in environment variables at the beginning of this RUN script
+    echo "Installing hexyl ${HEXYL_VERSION}..." && \
     wget -q https://github.com/sharkdp/hexyl/releases/download/v${HEXYL_VERSION}/hexyl_${HEXYL_VERSION}_amd64.deb && \
     echo "Verifying hexyl package checksum..." && \
     sha256sum hexyl_${HEXYL_VERSION}_amd64.deb && \
@@ -247,8 +247,9 @@ RUN \
     #      https://commondatastorage.googleapis.com/chromium-browser-snapshots/index.html?prefix=Linux_x64/433062/
     #
     # 7. Copy/paste the download URL for 'chrome-linux.zip'.
+    echo "Installing Chromium ${CHROMIUM_VERSION}..." && \
     wget -q -O chromium-linux.zip $CHROMIUM_PACKAGE_URL && \
-    echo "Verifying Chromium package checksum..." && \
+    echo "Verifying chromium-linux.zip checksum..." && \
     sha256sum chromium-linux.zip && \
     echo "$CHROMIUM_SHA256SUM *chromium-linux.zip" | sha256sum -c - && \
     unzip -q chromium-linux.zip && \
@@ -263,6 +264,8 @@ RUN \
     sed -i 's|HERE/chrome"|HERE/chrome" --disable-setuid-sandbox --no-sandbox|g' \
         /opt/chromium/$CHROMIUM_VERSION/chrome-wrapper && \
     rm chromium-linux.zip && \
+    echo 'export CHROME_BIN=/usr/local/bin/chrome-wrapper\n' >> /docker-entrypoint.sh && \
+    echo "echo \"`chrome-wrapper --version`\"\n" >> /docker-entrypoint.sh && \
 
     # Install older libraries required by older Chrome release (56.x).
     #
@@ -312,6 +315,7 @@ RUN \
     #
     # For older versions of Chrome (e.g. '56.x') look through https://chromedriver.storage.googleapis.com/index.html
     # and find the newest release with a 'notes.txt' file that mentions the major version e.g. 'Supports Chrome v56-58'.
+    echo "Installing ChromeDriver ${CHROMEDRIVER_VERSION}..." && \
     wget -q https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip && \
     echo "Verifying ChromeDriver package checksum..." && \
     sha256sum chromedriver_linux64.zip && \
@@ -327,6 +331,7 @@ RUN \
     #
     # PhantomJS is a discontinued headless browser used for automated web page interaction, such as testing. Although
     # normal unit test builds can use Chrome via Karma, unfortunately PhantomJS is required by cljs-oss/canary builds.
+    echo "Installing PhantomJS ${PHANTOMJS_VERSION}..." && \
     wget -q -O phantomjs.tar.bz2 https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-${PHANTOMJS_VERSION}-linux-x86_64.tar.bz2 && \
     echo "Verifying PhantomJS package checksum..." && \
     sha256sum phantomjs.tar.bz2 && \
@@ -343,6 +348,7 @@ RUN \
     # Windows 10 has become a surprisingly good platform for developers in recent times. Just like its important to have
     # a preferred editor handy, be it vim or emacs, it is also important to have a familiar shell available to those who
     # want to use it.
+    echo "Installing PowerShell ${POWERSHELL_VERSION}..." && \
     wget -q -O powershell.tar.gz https://github.com/PowerShell/PowerShell/releases/download/v${POWERSHELL_VERSION}/powershell-${POWERSHELL_VERSION}-linux-x64.tar.gz && \
     echo "Verifying powershell package checksum..." && \
     sha256sum powershell.tar.gz && \
@@ -363,6 +369,7 @@ RUN \
     #lein deps && \
     #rm project.clj && \
 
+    echo "Installing Lumo, Karma CLI and Diff so Fancy..." && \
     npm install -g --unsafe-perm \
       lumo-cljs@$LUMO_VERSION \
       karma-cli@$KARMA_CLI_VERSION \
