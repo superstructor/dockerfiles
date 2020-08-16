@@ -224,6 +224,12 @@ RUN \
     unzip -q /tmp/chromium-linux.zip && \
     mv chrome-linux chromium-$CHROMIUM_VERSION && \
     ln -sv chromium-$CHROMIUM_VERSION chromium && \
+    # Fixes error on startup like:
+    # 'ChromeHeadless stderr: [3284:3284:0816/000443:FATAL:zygote_host_impl_linux.cc(107)] No usable sandbox! Update your kernel...'
+    #
+    # TODO When upgrading Chrome: Verify that there are no changes to `chrome-wrapper` that would cause this to fail.
+    sed -i 's|HERE/chrome"|HERE/chrome" --disable-setuid-sandbox --no-sandbox|g' \
+        /opt/chromium/chrome-wrapper && \
     cd /tmp && \
     rm chromium-linux.zip && \
 
