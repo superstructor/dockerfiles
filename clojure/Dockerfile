@@ -338,6 +338,8 @@ RUN \
       diff-so-fancy@$DIFF_SO_FANCY_VERSION && \
 
     # Cleanup
+    rm -rf /usr/share/icons/* \
+           /var/lib/apt/lists/* && \
     #apt-get purge -y --auto-remove gnupg wget
 
     echo "Done."
