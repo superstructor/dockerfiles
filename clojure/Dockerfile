@@ -134,13 +134,13 @@ RUN \
 
     # Install Clojure:
     echo "Installing 'Official' Clojure CLI ${CLOJURE_VERSION}..." && \
-    wget -q https://download.clojure.org/install/linux-install-$CLOJURE_VERSION.sh && \
+    wget -q "https://download.clojure.org/install/linux-install-$CLOJURE_VERSION.sh" && \
     echo "Verifying linux-install-$CLOJURE_VERSION.sh checksum..." && \
     sha256sum linux-install-$CLOJURE_VERSION.sh && \
     echo "$CLOJURE_SHA256SUM *linux-install-$CLOJURE_VERSION.sh" | sha256sum -c - && \
     chmod +x linux-install-$CLOJURE_VERSION.sh && \
     ./linux-install-$CLOJURE_VERSION.sh && \
-    rm -f linux-install-$CLOJURE_VERSION.sh && \
+    rm -f "linux-install-${CLOJURE_VERSION}.sh" && \
     clojure -e "(clojure-version)" && \
     echo '\n\n' && \
 
@@ -152,14 +152,14 @@ RUN \
     # See technomancy/leiningen#2691
     #
     # wget -q https://raw.githubusercontent.com/technomancy/leiningen/$LEIN_VERSION/bin/lein-pkg && \
-    wget -q https://raw.githubusercontent.com/technomancy/leiningen/7677dabea40a2d17a42a718ca8c7e450b09e153c/bin/lein-pkg && \
+    wget -q "https://raw.githubusercontent.com/technomancy/leiningen/7677dabea40a2d17a42a718ca8c7e450b09e153c/bin/lein-pkg" && \
     echo "Verifying lein-pkg checksum..." && \
     sha256sum lein-pkg && \
     echo "$LEIN_SHA256SUM *lein-pkg" | sha256sum -c - && \
     mv lein-pkg $LEIN_INSTALL/lein && \
     chmod 0755 $LEIN_INSTALL/lein && \
-    wget -q https://github.com/technomancy/leiningen/releases/download/$LEIN_VERSION/leiningen-$LEIN_VERSION-standalone.zip && \
-    wget -q https://github.com/technomancy/leiningen/releases/download/$LEIN_VERSION/leiningen-$LEIN_VERSION-standalone.zip.asc && \
+    wget -q "https://github.com/technomancy/leiningen/releases/download/$LEIN_VERSION/leiningen-$LEIN_VERSION-standalone.zip" && \
+    wget -q "https://github.com/technomancy/leiningen/releases/download/$LEIN_VERSION/leiningen-$LEIN_VERSION-standalone.zip.asc" && \
     gpg --batch --keyserver keys.openpgp.org --recv-key $LEIN_GPGKEY && \
     echo "Verifying leiningen-$LEIN_VERSION-standalone.zip PGP signature..." && \
     gpg --batch --verify leiningen-$LEIN_VERSION-standalone.zip.asc leiningen-$LEIN_VERSION-standalone.zip && \
@@ -172,7 +172,7 @@ RUN \
     # Install Boot:
     echo "Installing Boot..." && \
     mkdir -p $BOOT_INSTALL && \
-    wget -q https://github.com/boot-clj/boot-bin/releases/download/latest/boot.sh && \
+    wget -q "https://github.com/boot-clj/boot-bin/releases/download/latest/boot.sh" && \
     echo "Verifying boot.sh checksum..." && \
     sha256sum boot.sh && \
     echo "$BOOT_SHA256SUM *boot.sh" | sha256sum -c - && \
@@ -196,12 +196,12 @@ RUN \
     # 4. Copy/paste the checksum to BAT_SHA256SUM in environment variables at the beginning of this RUN script
     # 5. Edit the BAT_VERSION in environment variables at the beginning of this RUN script
     echo "Installing bat ${BAT_VERSION}..." && \
-    wget -q https://github.com/sharkdp/bat/releases/download/v${BAT_VERSION}/bat_${BAT_VERSION}_amd64.deb && \
-    echo "Verifying bat package checksum..." && \
-    sha256sum bat_${BAT_VERSION}_amd64.deb && \
+    wget -q "https://github.com/sharkdp/bat/releases/download/v${BAT_VERSION}/bat_${BAT_VERSION}_amd64.deb" && \
+    echo "Verifying bat_${BAT_VERSION}_amd64.deb checksum..." && \
+    sha256sum "bat_${BAT_VERSION}_amd64.deb" && \
     echo "$BAT_SHA256SUM *bat_${BAT_VERSION}_amd64.deb" | sha256sum -c - && \
-    dpkg -i bat_${BAT_VERSION}_amd64.deb && \
-    rm -f bat_${BAT_VERSION}_amd64.deb && \
+    dpkg -i "bat_${BAT_VERSION}_amd64.deb" && \
+    rm -f "bat_${BAT_VERSION}_amd64.deb" && \
     echo '\n\n' && \
 
     # Install fd
@@ -215,12 +215,12 @@ RUN \
     # 4. Copy/paste the checksum to FD_SHA256SUM in environment variables at the beginning of this RUN script
     # 5. Edit the FD_VERSION in environment variables at the beginning of this RUN script
     echo "Installing fd ${FD_VERSION}..." && \
-    wget -q https://github.com/sharkdp/fd/releases/download/v${FD_VERSION}/fd_${FD_VERSION}_amd64.deb && \
-    echo "Verifying fd package checksum..." && \
-    sha256sum fd_${FD_VERSION}_amd64.deb && \
+    wget -q "https://github.com/sharkdp/fd/releases/download/v${FD_VERSION}/fd_${FD_VERSION}_amd64.deb" && \
+    echo "Verifying fd_${FD_VERSION}_amd64.deb checksum..." && \
+    sha256sum "fd_${FD_VERSION}_amd64.deb" && \
     echo "$FD_SHA256SUM *fd_${FD_VERSION}_amd64.deb" | sha256sum -c - && \
-    dpkg -i fd_${FD_VERSION}_amd64.deb && \
-    rm -f fd_${FD_VERSION}_amd64.deb && \
+    dpkg -i "fd_${FD_VERSION}_amd64.deb" && \
+    rm -f "fd_${FD_VERSION}_amd64.deb" && \
     echo '\n\n' && \
 
     # Install hexyl
