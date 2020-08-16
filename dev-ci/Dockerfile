@@ -36,6 +36,9 @@ RUN \
     export EXA_SHA256SUM=53d8746b1ca2d945c5b75767edc83addfd1fe3c4a2b0b766c07172473330a50b && \
     export WEBSOCAT_VERSION=1.6.0 && \
     export WEBSOCAT_SHA256SUM=cfe30fb51ebbce16059315202dc55bc528e43b83fa2e20b2e9179a85f7f05c28 && \
+    export PUEUE_VERSION=0.7.1 && \
+    export PUEUE_SHA256SUM=f134b96cf0b3b7582df021ea34190d79e05615dd43374fc071ba9ddc4b4b345a && \
+    export PUEUED_SHA256SUM=57bf82b2b3064658968a3eb0e01d8f3d1a142190cfb8cc6ac114f6e4b8142336 && \
     export POWERSHELL_MAJOR_VERSION=7 && \
     export POWERSHELL_VERSION=$POWERSHELL_MAJOR_VERSION.0.3 && \
     export POWERSHELL_SHA256SUM=a9c023940c77a96a9f5135309e44c93ed627983bb1a66ecf5beb42bbba54ead6 && \
@@ -284,6 +287,24 @@ RUN \
     echo "${WEBSOCAT_SHA256SUM} *websocat_${WEBSOCAT_VERSION}_ssl1.1_amd64.deb" | sha256sum -c - && \
     dpkg -i "websocat_${WEBSOCAT_VERSION}_ssl1.1_amd64.deb" && \
     rm -f "websocat_${WEBSOCAT_VERSION}_ssl1.1_amd64.deb" && \
+    echo '\n\n' && \
+
+    # Install
+    echo "Installing pueue and pueued ${PUEUE_VERSION}..." && \
+    wget -q "https://github.com/Nukesor/pueue/releases/download/v${PUEUE_VERSION}/pueue-linux-x86_64" && \
+    wget -q "https://github.com/Nukesor/pueue/releases/download/v${PUEUE_VERSION}/pueued-linux-x86_64" && \
+    echo "Verifying pueue-linux-x86_64 checksum..." && \
+    sha256sum pueue-linux-x86_64 && \
+    echo "${PUEUE_SHA256SUM} *pueue-linux-x86_64" | sha256sum -c - && \
+    echo "Verifying pueued-linux-x86_64 checksum..." && \
+    sha256sum pueued-linux-x86_64 && \
+    echo "${PUEUED_SHA256SUM} *pueued-linux-x86_64" | sha256sum -c - && \
+    mkdir -p "/opt/pueue/${PUEUE_VERSION}/bin" && \
+    ln -s "/opt/pueue/${PUEUE_VERSION}" /opt/pueue/latest && \
+    mv pueue-linux-x86_64 "/opt/pueue/${PUEUE_VERSION}/bin/pueue" && \
+    mv pueued-linux-x86_64 "/opt/pueue/${PUEUE_VERSION}/bin/pueued" && \
+    chmod +x "/opt/pueue/${PUEUE_VERSION}/bin/pueue{,d}" && \
+    ln -s /opt/pueue/latest/bin/* /usr/local/bin && \
     echo '\n\n' && \
 
     # Install Chrome
