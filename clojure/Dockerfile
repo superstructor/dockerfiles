@@ -187,6 +187,11 @@ RUN \
     pip3 -q install awscli && \
     echo '\n\n' && \
 
+    # Install pytest
+    echo "Installing pytest..." && \
+    pip3 -q install pytest && \
+    echo '\n\n' && \
+
     # Install bat
     #
     # A cat(1) clone with syntax highlighting and Git integration.
