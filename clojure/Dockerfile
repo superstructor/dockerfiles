@@ -52,41 +52,49 @@ RUN \
 
     apt-get update -qq && \
     apt-get dist-upgrade -qq -y && \
+    echo '\n\n' && \
 
     # Install tools needed by the subsequent commands.
     apt-get install -qq -y --no-install-recommends \
         ca-certificates gnupg \
         curl wget \
         unzip && \
+    echo '\n\n' && \
 
     # When adding PPAs do not depend on `software-properties-common` for the `add-apt-repository`
     # command as that adds several hundred megabytes of dependencies.
     echo "Adding 'Git stable releases' PPA..." && \
     echo "deb http://ppa.launchpad.net/git-core/ppa/ubuntu focal main" > /etc/apt/sources.list.d/git-core-ubuntu-ppa-focal.list && \
     apt-key adv --keyserver keyserver.ubuntu.com --recv-keys $GIT_GPGKEY && \
+    echo '\n\n' && \
 
     # Git Large File Storage is required when cloning any Git repository that uses the Git LFS
     # Specification. See https://github.com/git-lfs/git-lfs
     echo "Adding Git LFS package repository..." && \
     curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash && \
+    echo '\n\n' && \
 
     # The 'Neovim Stable' PPA provides 0.4.x which is extremely out of date to the point of being
     # unusable so uses the 'Neovim Unstable' PPA for 0.5.x instead.
     echo "Adding 'Neovim Unstable' PPA..." && \
     echo "deb http://ppa.launchpad.net/neovim-ppa/unstable/ubuntu focal main" >  /etc/apt/sources.list.d/neovim-ppa-ubuntu-unstable-focal.list && \
     apt-key adv --keyserver keyserver.ubuntu.com --recv-keys $NEOVIM_GPGKEY && \
+    echo '\n\n' && \
 
     echo "Adding 'Mike Fikes's Planck' PPA..." && \
     echo "deb http://ppa.launchpad.net/mfikes/planck/ubuntu focal main" > /etc/apt/sources.list.d/mfikes-ubuntu-planck-focal.list && \
     apt-key adv --keyserver keyserver.ubuntu.com --recv-keys $PLANCK_GPGKEY && \
+    echo '\n\n' && \
 
     echo "Adding NodeSource's Node.js v12.x package repository..." && \
     curl -sL https://deb.nodesource.com/setup_12.x | bash - && \
+    echo '\n\n' && \
 
     # Add Yarn package repository.
     echo "Adding Yarn package repository..." && \
     echo "deb https://dl.yarnpkg.com/debian/ stable main" > /etc/apt/sources.list.d/yarn.list && \
     curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
+    echo '\n\n' && \
 
     # Begin /docker-entrypoint.sh script. This is amended throughout the RUN
     # command with additional lines.
@@ -108,6 +116,7 @@ RUN \
     # Voting in the popularity contest may help keep packages we use supported by Ubuntu.
       popularity-contest && \
     rm -rf /var/lib/apt/lists/* && \
+    echo '\n\n' && \
 
     # Start a X11 virtual framebuffer to run tests in Chrome.
     echo 'Xvfb :99 -screen 0 1920x1080x24 &\n' >> /docker-entrypoint.sh && \
@@ -129,6 +138,7 @@ RUN \
     ./linux-install-$CLOJURE_VERSION.sh && \
     rm -f linux-install-$CLOJURE_VERSION.sh && \
     clojure -e "(clojure-version)" && \
+    echo '\n\n' && \
 
     # Install Leiningen:
     echo "Installing Leiningen ${LEIN_VERSION}..." && \
@@ -153,6 +163,7 @@ RUN \
     mkdir -p /usr/share/java && \
     mv leiningen-$LEIN_VERSION-standalone.zip /usr/share/java/leiningen-$LEIN_VERSION-standalone.jar && \
     echo "echo \"`lein version`\"\n" >> /docker-entrypoint.sh && \
+    echo '\n\n' && \
 
     # Install Boot:
     echo "Installing Boot..." && \
@@ -163,10 +174,12 @@ RUN \
     echo "$BOOT_SHA256SUM *boot.sh" | sha256sum -c - && \
     mv boot.sh $BOOT_INSTALL/boot && \
     chmod 0755 $BOOT_INSTALL/boot && \
+    echo '\n\n' && \
 
     # Install AWS CLI
     echo "Installing AWS CLI..." && \
     pip3 -q install awscli && \
+    echo '\n\n' && \
 
     # Install bat
     #
@@ -185,6 +198,7 @@ RUN \
     echo "$BAT_SHA256SUM *bat_${BAT_VERSION}_amd64.deb" | sha256sum -c - && \
     dpkg -i bat_${BAT_VERSION}_amd64.deb && \
     rm -f bat_${BAT_VERSION}_amd64.deb && \
+    echo '\n\n' && \
 
     # Install fd
     #
@@ -203,6 +217,7 @@ RUN \
     echo "$FD_SHA256SUM *fd_${FD_VERSION}_amd64.deb" | sha256sum -c - && \
     dpkg -i fd_${FD_VERSION}_amd64.deb && \
     rm -f fd_${FD_VERSION}_amd64.deb && \
+    echo '\n\n' && \
 
     # Install hexyl
     #
@@ -221,6 +236,7 @@ RUN \
     echo "$HEXYL_SHA256SUM *hexyl_${HEXYL_VERSION}_amd64.deb" | sha256sum -c - && \
     dpkg -i hexyl_${HEXYL_VERSION}_amd64.deb && \
     rm -f hexyl_${HEXYL_VERSION}_amd64.deb && \
+    echo '\n\n' && \
 
     # Install Chrome
     #
@@ -307,6 +323,8 @@ RUN \
     dpkg -i "libpangoft2-1.0-0_1.40.14-1ubuntu0.1_amd64.deb" && \
     rm -f "libpangoft2-1.0-0_1.40.14-1ubuntu0.1_amd64.deb" && \
 
+    echo '\n\n' && \
+
     # Install ChromeDriver
     #
     # ChromeDriver version MUST be the correct version for the Chrome release it is being used with.
@@ -326,6 +344,7 @@ RUN \
     chmod +x /usr/local/bin/chromedriver && \
     chromedriver --version && \
     echo "echo \"`chromedriver --version`\"\n" >> /docker-entrypoint.sh && \
+    echo '\n\n' && \
 
     # Install PhantomJS
     #
@@ -342,6 +361,7 @@ RUN \
     ln -s /opt/phantomjs/${PHANTOMJS_VERSION} /opt/phantomjs/latest && \
     ln -s /opt/phantomjs/latest/bin/phantomjs /usr/local/bin/phantomjs && \
     echo "echo \"PhantomJS `phantomjs --version`\"\n" >> /docker-entrypoint.sh && \
+    echo '\n\n' && \
 
     # Install PowerShell
     #
@@ -359,6 +379,7 @@ RUN \
     chmod +x /opt/microsoft/powershell/${POWERSHELL_MAJOR_VERSION}/pwsh && \
     ln -s /opt/microsoft/powershell/${POWERSHELL_MAJOR_VERSION}/pwsh /usr/local/bin/pwsh && \
     echo "echo \"`pwsh --version`\"\n" >> /docker-entrypoint.sh && \
+    echo '\n\n' && \
 
     # Finish Docker ENTRYPOINT script:
     echo 'exec "$@"\n' >> /docker-entrypoint.sh && \
