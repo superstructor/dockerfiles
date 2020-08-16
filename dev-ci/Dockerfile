@@ -128,12 +128,6 @@ RUN \
     echo 'Xvfb :99 -screen 0 1920x1080x24 &\n' >> /docker-entrypoint.sh && \
     echo 'export DISPLAY=:99\n' >> /docker-entrypoint.sh && \
 
-    echo "echo \"`git --version`\"\n" >> /docker-entrypoint.sh && \
-    echo "echo \"Node.js `node --version`\"\n" >> /docker-entrypoint.sh && \
-    echo "echo \"NPM `npm --version`\"\n" >> /docker-entrypoint.sh && \
-    echo "echo \"Yarn `yarn --version`\"\n" >> /docker-entrypoint.sh && \
-    echo "echo \"`python3 --version`\"\n" >> /docker-entrypoint.sh && \
-
     # Install Clojure:
     echo "Installing 'Official' Clojure CLI ${CLOJURE_VERSION}..." && \
     wget -q "https://download.clojure.org/install/linux-install-$CLOJURE_VERSION.sh" && \
@@ -168,7 +162,6 @@ RUN \
     rm leiningen-$LEIN_VERSION-standalone.zip.asc && \
     mkdir -p /usr/share/java && \
     mv leiningen-$LEIN_VERSION-standalone.zip /usr/share/java/leiningen-$LEIN_VERSION-standalone.jar && \
-    echo "echo \"`lein version`\"\n" >> /docker-entrypoint.sh && \
     echo '\n\n' && \
 
     # Install Boot:
@@ -326,7 +319,6 @@ RUN \
         /opt/chromium/$CHROMIUM_VERSION/chrome-wrapper && \
     rm chromium-linux.zip && \
     echo 'export CHROME_BIN=/usr/local/bin/chrome-wrapper\n' >> /docker-entrypoint.sh && \
-    echo "echo \"`chrome-wrapper --version`\"\n" >> /docker-entrypoint.sh && \
 
     # Install older libraries required by older Chrome release (56.x).
     #
@@ -388,7 +380,6 @@ RUN \
     mv chromedriver /usr/local/bin/chromedriver && \
     chmod +x /usr/local/bin/chromedriver && \
     chromedriver --version && \
-    echo "echo \"`chromedriver --version`\"\n" >> /docker-entrypoint.sh && \
     echo '\n\n' && \
 
     # Install PhantomJS
@@ -405,7 +396,6 @@ RUN \
     rm -f phantomjs.tar.bz2 && \
     ln -s /opt/phantomjs/${PHANTOMJS_VERSION} /opt/phantomjs/latest && \
     ln -s /opt/phantomjs/latest/bin/phantomjs /usr/local/bin/phantomjs && \
-    echo "echo \"PhantomJS `phantomjs --version`\"\n" >> /docker-entrypoint.sh && \
     echo '\n\n' && \
 
     # Install PowerShell
@@ -423,7 +413,6 @@ RUN \
     rm -f powershell.tar.gz && \
     chmod +x /opt/microsoft/powershell/${POWERSHELL_MAJOR_VERSION}/pwsh && \
     ln -s /opt/microsoft/powershell/${POWERSHELL_MAJOR_VERSION}/pwsh /usr/local/bin/pwsh && \
-    echo "echo \"`pwsh --version`\"\n" >> /docker-entrypoint.sh && \
     echo '\n\n' && \
 
     # Finish Docker ENTRYPOINT script:
@@ -440,6 +429,21 @@ RUN \
       lumo-cljs@$LUMO_VERSION \
       karma-cli@$KARMA_CLI_VERSION \
       diff-so-fancy@$DIFF_SO_FANCY_VERSION && \
+
+    echo 'neofetch\n' >> /docker-entrypoint.sh && \
+    echo "echo \"`git --version`\"\n" >> /docker-entrypoint.sh && \
+    echo "echo \"`git-lfs --version`\"\n" >> /docker-entrypoint.sh && \
+    echo "echo \"`lein version`\"\n" >> /docker-entrypoint.sh && \
+    echo "echo \"lumo `lumo --version`\"\n" >> /docker-entrypoint.sh && \
+    echo "echo \"Planck `planck --version`\"\n" >> /docker-entrypoint.sh && \
+    echo "echo \"Node.js `node --version`\"\n" >> /docker-entrypoint.sh && \
+    echo "echo \"NPM `npm --version`\"\n" >> /docker-entrypoint.sh && \
+    echo "echo \"Yarn `yarn --version`\"\n" >> /docker-entrypoint.sh && \
+    echo "echo \"`python3 --version`\"\n" >> /docker-entrypoint.sh && \
+    echo "echo \"`pwsh --version`\"\n" >> /docker-entrypoint.sh && \
+    echo "echo \"`chrome-wrapper --version`\"\n" >> /docker-entrypoint.sh && \
+    echo "echo \"`chromedriver --version`\"\n" >> /docker-entrypoint.sh && \
+    echo "echo \"PhantomJS `phantomjs --version`\"\n" >> /docker-entrypoint.sh && \
 
     # Cleanup
     rm -rf /usr/share/icons/* \
