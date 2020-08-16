@@ -221,7 +221,7 @@ RUN \
     sha256sum chromium-linux.zip && \
     echo "$CHROMIUM_SHA256SUM *chromium-linux.zip" | sha256sum -c - && \
     cd /opt && \
-    unzip /tmp/chromium-linux.zip && \
+    unzip -q /tmp/chromium-linux.zip && \
     mv chrome-linux chromium-$CHROMIUM_VERSION && \
     ln -sv chromium-$CHROMIUM_VERSION chromium && \
     cd /tmp && \
