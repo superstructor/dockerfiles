@@ -265,7 +265,11 @@ RUN \
     echo "Verifying exa-linux-x86_64-${EXA_VERSION}.zip checksum..." && \
     sha256sum "exa-linux-x86_64-${EXA_VERSION}.zip" && \
     echo "${EXA_SHA256SUM} *exa-linux-x86_64-${EXA_VERSION}.zip" | sha256sum -c - && \
-    dpkg -i "exa-linux-x86_64-${EXA_VERSION}.zip" && \
+    unzip -q "exa-linux-x86_64-${EXA_VERSION}.zip" && \
+    mkdir -p "/opt/exa/${EXA_VERSION}/bin" && \
+    ln -s "/opt/exa/${EXA_VERSION}" /opt/exa/latest && \
+    mv exa-linux-x86_64 "/opt/exa/${EXA_VERSION}/bin/exa" && \
+    ln -s /opt/exa/latest /usr/local/bin/exa && \
     rm -f "exa-linux-x86_64-${EXA_VERSION}.zip" && \
     echo '\n\n' && \
 
