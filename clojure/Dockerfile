@@ -30,6 +30,8 @@ RUN \
     export FD_SHA256SUM=90890739d3995ed721e2b858ef3de6c6a64d25f0eda2bbd1e136c041195d76f2 && \
     export HEXYL_VERSION=0.8.0 && \
     export HEXYL_SHA256SUM=2e85c60264161ba7b99d294e0eda1664b1df776a709286db942416e494168761 && \
+    export RIPGREP_VERSION=12.1.1 && \
+    export RIPGREP_SHA256SUM=18ef498312073da55d2f2f65c6a906085c68368a23c9a45a87fcb8539be96608 && \
     export POWERSHELL_MAJOR_VERSION=7 && \
     export POWERSHELL_VERSION=$POWERSHELL_MAJOR_VERSION.0.3 && \
     export POWERSHELL_SHA256SUM=a9c023940c77a96a9f5135309e44c93ed627983bb1a66ecf5beb42bbba54ead6 && \
@@ -230,12 +232,22 @@ RUN \
     # 4. Copy/paste the checksum to HEXYL_SHA256SUM in environment variables at the beginning of this RUN script
     # 5. Edit the HEXYL_VERSION in environment variables at the beginning of this RUN script
     echo "Installing hexyl ${HEXYL_VERSION}..." && \
-    wget -q https://github.com/sharkdp/hexyl/releases/download/v${HEXYL_VERSION}/hexyl_${HEXYL_VERSION}_amd64.deb && \
+    wget -q "https://github.com/sharkdp/hexyl/releases/download/v${HEXYL_VERSION}/hexyl_${HEXYL_VERSION}_amd64.deb" && \
     echo "Verifying hexyl package checksum..." && \
-    sha256sum hexyl_${HEXYL_VERSION}_amd64.deb && \
+    sha256sum "hexyl_${HEXYL_VERSION}_amd64.deb" && \
     echo "$HEXYL_SHA256SUM *hexyl_${HEXYL_VERSION}_amd64.deb" | sha256sum -c - && \
-    dpkg -i hexyl_${HEXYL_VERSION}_amd64.deb && \
-    rm -f hexyl_${HEXYL_VERSION}_amd64.deb && \
+    dpkg -i "hexyl_${HEXYL_VERSION}_amd64.deb" && \
+    rm -f "hexyl_${HEXYL_VERSION}_amd64.deb" && \
+    echo '\n\n' && \
+
+    # Install ripgrep
+    echo "Installing ripgrep ${RIPGREP_VERSION}..." && \
+    wget -q "https://github.com/BurntSushi/ripgrep/releases/download/${RIPGREP_VERSION}/ripgrep_${RIPGREP_VERSION}_amd64.deb" && \
+    echo "Verifying ripgrep_${RIPGREP_VERSION}_amd64.deb checksum..." && \
+    sha256sum "ripgrep_${RIPGREP_VERSION}_amd64.deb" && \
+    echo "${RIPGREP_SHA256SUM} *ripgrep_${RIPGREP_VERSION}_amd64.deb" | sha256sum -c - && \
+    dpkg -i "ripgrep_${RIPGREP_VERSION}_amd64.deb" && \
+    rm -f "ripgrep_${RIPGREP_VERSION}_amd64.deb" && \
     echo '\n\n' && \
 
     # Install Chrome
