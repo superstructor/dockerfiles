@@ -180,6 +180,11 @@ RUN \
     pip3 -q install awscli && \
     echo '\n\n' && \
 
+    # Install yq (jq wrapper for YAML and XML)
+    echo "Installing yq..." && \
+    pip3 -q install yq && \
+    echo '\n\n' && \
+
     # Install pytest
     echo "Installing pytest..." && \
     pip3 -q install pytest && \
