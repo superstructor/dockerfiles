@@ -35,6 +35,7 @@ RUN \
     export POWERSHELL_SHA256SUM=a9c023940c77a96a9f5135309e44c93ed627983bb1a66ecf5beb42bbba54ead6 && \
     export GIT_GPGKEY=E1DD270288B4E6030699E45FA1715D88E1DF1F24 && \
     export NEOVIM_GPGKEY=9DBB0BE9366964F134855E2255F96FCF8231B6DD && \
+    export PLANCK_GPGKEY=A5D6812987A6E53579AF0308D3D743111F327606 && \
     export CHROMIUM_VERSION=56.0.2924.0 && \
     export CHROMIUM_PACKAGE_URL="https://www.googleapis.com/download/storage/v1/b/chromium-browser-snapshots/o/Linux_x64%2F433062%2Fchrome-linux.zip?generation=1479441205933000&alt=media" && \
     export CHROMIUM_SHA256SUM=5e2e38ffbed6ff9bef287026c8d2628b12b5a43b5bf7c235bfa182e7fd5d213f && \
@@ -71,6 +72,10 @@ RUN \
     echo "deb http://ppa.launchpad.net/neovim-ppa/unstable/ubuntu focal main" >  /etc/apt/sources.list.d/neovim-ppa-ubuntu-unstable-focal.list && \
     apt-key adv --keyserver keyserver.ubuntu.com --recv-keys $NEOVIM_GPGKEY && \
 
+    echo "Adding 'Mike Fikes's Planck' PPA..." && \
+    echo "deb http://ppa.launchpad.net/mfikes/planck/ubuntu focal main" > /etc/apt/sources.list.d/mfikes-ubuntu-planck-focal.list && \
+    apt-key adv --keyserver keyserver.ubuntu.com --recv-keys $PLANCK_GPGKEY && \
+
     # Add Node.js v12.x package repository.
     curl -sL https://deb.nodesource.com/setup_12.x | bash - && \
 
@@ -86,7 +91,7 @@ RUN \
     apt-get install -q -y --no-install-recommends \
       git jq silversearcher-ag ncdu htop rlwrap tmux openssh-client mosh \
       neovim emacs-nox \
-      zsh build-essential openjdk-$JVM_VERSION\-jdk-headless nodejs yarn python3-pip \
+      zsh build-essential openjdk-$JVM_VERSION\-jdk-headless nodejs yarn python3-pip planck \
       pngnq pngquant pngtools pngmeta pngcrush pngcheck \
       jhead jpeginfo jpegoptim jpegpixi \
     # These are dependencies of xvfb and/or Chrome. Unfortunately due to the old version of Chrome
