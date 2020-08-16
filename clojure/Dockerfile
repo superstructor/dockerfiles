@@ -237,6 +237,46 @@ RUN \
     cd /tmp && \
     rm chromium-linux.zip && \
 
+    # Install older libraries required by older Chrome release (56.x).
+    #
+    # The version of Chrome installed is not compatible with newer releases of
+    # the following libraries:
+    #     $ ldd chrome | grep pango
+    #       libpangocairo-1.0.so.0 => /lib/x86_64-linux-gnu/libpangocairo-1.0.so.0 (0x00007f314a52b000)
+    #       libpango-1.0.so.0 => /lib/x86_64-linux-gnu/libpango-1.0.so.0 (0x00007f314a2de000)
+    #       libpangoft2-1.0.so.0 => /lib/x86_64-linux-gnu/libpangoft2-1.0.so.0 (0x00007f3148673000)
+    #
+    # This issue causes an error like:
+    #     (chrome:1733): Pango-ERROR **: 04:57:48.341: Harfbuzz version too old (1.3.1)
+    #
+    # To fix it older versions of the associated packages are installed over the top of the current
+    # versions.
+    #
+    # TODO When upgrading Chrome: Remove this fix and verify the above error does not reoccur.
+    #
+    # Since this fix is expected to be removed when upgrading Chrome, the specific versions and
+    # checksums are not stored in environment variables above for ease of upgrades.
+    wget -q "http://mirrors.kernel.org/ubuntu/pool/main/p/pango1.0/libpango-1.0-0_1.40.14-1ubuntu0.1_amd64.deb" && \
+    echo "Verifying libpango-1.0-0_1.40.14-1ubuntu0.1_amd64.deb checksum..." && \
+    sha256sum "libpango-1.0-0_1.40.14-1ubuntu0.1_amd64.deb" && \
+    echo "bbe6059047b0e03433aee358b01d12c8dc083532fbd8160494aeb9dc74f3a3d9 *libpango-1.0-0_1.40.14-1ubuntu0.1_amd64.deb" | sha256sum -c - && \
+    dpkg -i "libpango-1.0-0_1.40.14-1ubuntu0.1_amd64.deb" && \
+    rm -f "libpango-1.0-0_1.40.14-1ubuntu0.1_amd64.deb" && \
+
+    wget -q "http://mirrors.kernel.org/ubuntu/pool/main/p/pango1.0/libpangocairo-1.0-0_1.40.14-1ubuntu0.1_amd64.deb" && \
+    echo "Verifying libpangocairo-1.0-0_1.40.14-1ubuntu0.1_amd64.deb checksum..." && \
+    sha256sum "libpangocairo-1.0-0_1.40.14-1ubuntu0.1_amd64.deb" && \
+    echo "cb0f273b2ae6f752aa8d295aedb38eb4820cffc2c0c7fc25bc341ec8b182930a *libpangocairo-1.0-0_1.40.14-1ubuntu0.1_amd64.deb" | sha256sum -c - && \
+    dpkg -i "libpangocairo-1.0-0_1.40.14-1ubuntu0.1_amd64.deb" && \
+    rm -f "libpangocairo-1.0-0_1.40.14-1ubuntu0.1_amd64.deb" && \
+
+    wget -q "http://mirrors.kernel.org/ubuntu/pool/main/p/pango1.0/libpangoft2-1.0-0_1.40.14-1ubuntu0.1_amd64.deb" && \
+    echo "Verifying libpangoft2-1.0-0_1.40.14-1ubuntu0.1_amd64.deb checksum..." && \
+    sha256sum "libpangoft2-1.0-0_1.40.14-1ubuntu0.1_amd64.deb" && \
+    echo "e64b05c5108e501745955288a19492876f2bfbc7f54497fd6b87ae7b8b2238eb *libpangoft2-1.0-0_1.40.14-1ubuntu0.1_amd64.deb" | sha256sum -c - && \
+    dpkg -i "libpangoft2-1.0-0_1.40.14-1ubuntu0.1_amd64.deb" && \
+    rm -f "libpangoft2-1.0-0_1.40.14-1ubuntu0.1_amd64.deb" && \
+
     # Install ChromeDriver
     #
     # ChromeDriver version MUST be the correct version for the Chrome release it is being used with.
