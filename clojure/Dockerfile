@@ -59,16 +59,20 @@ RUN \
         curl wget \
         unzip && \
 
-    # Add the 'Git stable releases' PPA for the most recent releases of Git.
-    #
-    # Also, when adding a PPA do not depend on `software-properties-common` for
-    # the `add-apt-repository` command as that adds several hundred megabytes.
+    # When adding PPAs do not depend on `software-properties-common` for the `add-apt-repository`
+    # command as that adds several hundred megabytes of dependencies.
+    echo "Adding 'Git stable releases' PPA..." && \
     echo "deb http://ppa.launchpad.net/git-core/ppa/ubuntu focal main" > /etc/apt/sources.list.d/git-core-ubuntu-ppa-focal.list && \
     apt-key adv --keyserver keyserver.ubuntu.com --recv-keys $GIT_GPGKEY && \
 
-    # Add the 'Neovim Unstable' PPA for 0.5.x-series releases of Neovim. The
-    # 'Neovim Stable' PPA provides 0.4.x which is extremely out of date to the
-    # point of being unusable.
+    # Git Large File Storage is required when cloning any Git repository that uses the Git LFS
+    # Specification. See https://github.com/git-lfs/git-lfs
+    echo "Adding Git LFS package repository..." && \
+    curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash && \
+
+    # The 'Neovim Stable' PPA provides 0.4.x which is extremely out of date to the point of being
+    # unusable so uses the 'Neovim Unstable' PPA for 0.5.x instead.
+    echo "Adding 'Neovim Unstable' PPA..." && \
     echo "deb http://ppa.launchpad.net/neovim-ppa/unstable/ubuntu focal main" >  /etc/apt/sources.list.d/neovim-ppa-ubuntu-unstable-focal.list && \
     apt-key adv --keyserver keyserver.ubuntu.com --recv-keys $NEOVIM_GPGKEY && \
 
@@ -76,10 +80,11 @@ RUN \
     echo "deb http://ppa.launchpad.net/mfikes/planck/ubuntu focal main" > /etc/apt/sources.list.d/mfikes-ubuntu-planck-focal.list && \
     apt-key adv --keyserver keyserver.ubuntu.com --recv-keys $PLANCK_GPGKEY && \
 
-    # Add Node.js v12.x package repository.
+    echo "Adding NodeSource's Node.js v12.x package repository..." && \
     curl -sL https://deb.nodesource.com/setup_12.x | bash - && \
 
     # Add Yarn package repository.
+    echo "Adding Yarn package repository..." && \
     echo "deb https://dl.yarnpkg.com/debian/ stable main" > /etc/apt/sources.list.d/yarn.list && \
     curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
 
@@ -88,8 +93,8 @@ RUN \
     echo '#!/bin/sh\n' > /docker-entrypoint.sh && \
 
     # Install development tooling, common editors and language runtimes.
-    apt-get install -q -y --no-install-recommends \
-      git diffstat jq silversearcher-ag \
+    apt-get install -qq -y --no-install-recommends \
+      git git-lfs diffstat jq silversearcher-ag \
       ncdu htop \
       rlwrap tmux openssh-client mosh \
       neovim emacs-nox \
