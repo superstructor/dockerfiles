@@ -85,7 +85,11 @@ RUN \
       zsh build-essential openjdk-$JVM_VERSION\-jdk-headless nodejs yarn python3-pip \
       pngnq pngquant pngtools pngmeta pngcrush pngcheck \
       jhead jpeginfo jpegoptim jpegpixi \
-      xvfb libglib2.0-0 libgconf-2-4 \
+    # xvfb is used as a virtual framebuffer to run tests in Chrome.
+    # The rest are dependencies of xvfb and/or Chrome. Unfortunately due to the
+    # old version of Chrome used (56.x) there is a dependency on old libraries
+    # like libgtk2.0-0 that take up a lot of extra space.
+      xvfb libxcomposite1 libxcursor1 libxss1 libxrandr2 libgtk2.0-0 libgconf-2-4  \
       popularity-contest && \
     rm -rf /var/lib/apt/lists/* && \
 
