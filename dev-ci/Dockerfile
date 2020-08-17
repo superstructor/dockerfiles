@@ -449,6 +449,15 @@ RUN \
     rm -f powershell.tar.gz && \
     chmod +x /opt/microsoft/powershell/${POWERSHELL_MAJOR_VERSION}/pwsh && \
     ln -s /opt/microsoft/powershell/${POWERSHELL_MAJOR_VERSION}/pwsh /usr/local/bin/pwsh && \
+
+    pwsh -Command "Install-PackageProvider NuGet -Force" && \
+    pwsh -Command "Set-PSRepository PSGallery -InstallationPolicy Trusted" && \
+    pwsh -Command "Install-Module posh-git -Scope CurrentUser" && \
+    pwsh -Command "Install-Module oh-my-posh -Scope CurrentUser" && \
+    pwsh -Command "Install-Module -Name PSReadLine -AllowPrerelease -Scope CurrentUser -Force -SkipPublisherCheck" && \
+    pwsh -Command 'if (!(Test-Path -Path $PROFILE )) { New-Item -Type File -Path $PROFILE -Force }' && \
+    pwsh -Command 'echo "Import-Module posh-git\nImport-Module oh-my-posh\nSet-Theme Agnoster" > $PROFILE' && \
+
     echo '\n\n' && \
 
     # Finish Docker ENTRYPOINT script:
