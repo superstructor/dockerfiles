@@ -472,6 +472,9 @@ RUN \
     git clone --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.zprezto" && \
     zsh -c 'setopt EXTENDED_GLOB && for rcfile in "${ZDOTDIR:-$HOME}"/.zprezto/runcoms/^README.md(.N); do ln -s "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}"; done' && \
 
+    git clone --depth=1 https://github.com/Bash-it/bash-it.git ~/.bash_it && \
+    ~/.bash_it/install.sh --silent && \
+
     git clone --depth 1 https://github.com/liuchengxu/space-vim.git ~/.space-vim && \
     wget -q -O /root/.spacevim "${DOTFILES_BASE_URI}/.spacevim" && \
     cd ~/.space-vim && make neovim && cd /tmp && \
