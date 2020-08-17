@@ -53,6 +53,7 @@ RUN \
     export PHANTOMJS_VERSION=2.1.1 && \
     export PHANTOMJS_SHA256SUM=86dd9a4bf4aee45f1a84c9f61cf1947c1d6dce9b9e8d2a907105da7852460d2f && \
     export DEBIAN_FRONTEND=noninteractive && \
+    export DOTFILES_BASE_URI="https://raw.githubusercontent.com/superstructor/dockerfiles/master/dotfiles/" && \
 
     # Set the default timezone to Australia/Sydney.
     #echo "Australia/Sydney" > /etc/timezone
@@ -471,6 +472,10 @@ RUN \
     git clone --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.zprezto" && \
     zsh -c 'setopt EXTENDED_GLOB && for rcfile in "${ZDOTDIR:-$HOME}"/.zprezto/runcoms/^README.md(.N); do ln -s "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}"; done' && \
 
+    git clone --depth 1 https://github.com/liuchengxu/space-vim.git ~/.space-vim && \
+    wget -q -O /root/.spacevim "${DOTFILES_BASE_URI}/.spacevim" && \
+    cd ~/.space-vim && make neovim && cd /tmp && \
+
     # Finish Docker ENTRYPOINT script:
     echo 'exec "$@"\n' >> /docker-entrypoint.sh && \
     chmod +x /docker-entrypoint.sh && \
@@ -503,10 +508,7 @@ RUN \
 
     # Cleanup
     rm -rf /usr/share/icons/* \
-           /var/lib/apt/lists/* && \
-    #apt-get purge -y --auto-remove gnupg wget
-
-    echo "Done."
+           /var/lib/apt/lists/*
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["/bin/bash"]
