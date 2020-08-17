@@ -294,7 +294,7 @@ RUN \
     rm -f "websocat_${WEBSOCAT_VERSION}_ssl1.1_amd64.deb" && \
     echo '\n\n' && \
 
-    # Install
+    # Install pueue
     echo "Installing pueue and pueued ${PUEUE_VERSION}..." && \
     wget -q "https://github.com/Nukesor/pueue/releases/download/v${PUEUE_VERSION}/pueue-linux-x86_64" && \
     wget -q "https://github.com/Nukesor/pueue/releases/download/v${PUEUE_VERSION}/pueued-linux-x86_64" && \
@@ -450,7 +450,7 @@ RUN \
     chmod +x /opt/microsoft/powershell/${POWERSHELL_MAJOR_VERSION}/pwsh && \
     ln -s /opt/microsoft/powershell/${POWERSHELL_MAJOR_VERSION}/pwsh /usr/local/bin/pwsh && \
 
-    pwsh -Command "Install-PackageProvider NuGet -Force" && \
+    #pwsh -Command "Install-PackageProvider NuGet -Force" && \
     pwsh -Command "Set-PSRepository PSGallery -InstallationPolicy Trusted" && \
     pwsh -Command "Install-Module posh-git -Scope CurrentUser" && \
     pwsh -Command "Install-Module oh-my-posh -Scope CurrentUser" && \
