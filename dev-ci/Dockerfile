@@ -499,15 +499,12 @@ RUN \
       diff-so-fancy@$DIFF_SO_FANCY_VERSION && \
 
     echo 'neofetch\n' >> /docker-entrypoint.sh && \
+    echo "echo \"`lein version`\"\n" >> /docker-entrypoint.sh && \
+    echo "echo \"lumo `lumo --version` and Planck `planck --version`\"\n" >> /docker-entrypoint.sh && \
+    echo "echo \"Node.js `node --version` with NPM `npm --version` and Yarn `yarn --version`\"\n" >> /docker-entrypoint.sh && \
+    echo "echo \"`python2 --version` and `python3 --version`\"\n" >> /docker-entrypoint.sh && \
     echo "echo \"`git --version`\"\n" >> /docker-entrypoint.sh && \
     echo "echo \"`git-lfs --version`\"\n" >> /docker-entrypoint.sh && \
-    echo "echo \"`lein version`\"\n" >> /docker-entrypoint.sh && \
-    echo "echo \"lumo `lumo --version`\"\n" >> /docker-entrypoint.sh && \
-    echo "echo \"Planck `planck --version`\"\n" >> /docker-entrypoint.sh && \
-    echo "echo \"Node.js `node --version`\"\n" >> /docker-entrypoint.sh && \
-    echo "echo \"NPM `npm --version`\"\n" >> /docker-entrypoint.sh && \
-    echo "echo \"Yarn `yarn --version`\"\n" >> /docker-entrypoint.sh && \
-    echo "echo \"`python3 --version`\"\n" >> /docker-entrypoint.sh && \
     echo "echo \"`pwsh --version`\"\n" >> /docker-entrypoint.sh && \
     echo "echo \"`chrome-wrapper --version`\"\n" >> /docker-entrypoint.sh && \
     echo "echo \"`chromedriver --version`\"\n" >> /docker-entrypoint.sh && \
