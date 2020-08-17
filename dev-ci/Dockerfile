@@ -166,6 +166,8 @@ RUN \
     rm leiningen-$LEIN_VERSION-standalone.zip.asc && \
     mkdir -p /usr/share/java && \
     mv leiningen-$LEIN_VERSION-standalone.zip /usr/share/java/leiningen-$LEIN_VERSION-standalone.jar && \
+    mkdir -p /root/.lein && \
+    wget -q -O /root/.lein/profiles.clj "${DOTFILES_BASE_URI}/.lein/profiles.clj" && \
     echo '\n\n' && \
 
     # Install Boot:
@@ -478,6 +480,8 @@ RUN \
     git clone --depth 1 https://github.com/liuchengxu/space-vim.git ~/.space-vim && \
     wget -q -O /root/.spacevim "${DOTFILES_BASE_URI}/.spacevim" && \
     cd ~/.space-vim && make neovim && cd /tmp && \
+
+    wget -q -O /root/.gitconfig "${DOTFILES_BASE_URI}/.gitconfig" && \
 
     # Finish Docker ENTRYPOINT script:
     echo 'exec "$@"\n' >> /docker-entrypoint.sh && \
