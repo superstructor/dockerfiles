@@ -280,7 +280,7 @@ RUN \
     mkdir -p "/opt/exa/${EXA_VERSION}/bin" && \
     ln -s "/opt/exa/${EXA_VERSION}" /opt/exa/latest && \
     mv exa-linux-x86_64 "/opt/exa/${EXA_VERSION}/bin/exa" && \
-    ln -s /opt/exa/latest /usr/local/bin/exa && \
+    ln -s /opt/exa/latest/bin/exa /usr/local/bin/exa && \
     rm -f "exa-linux-x86_64-${EXA_VERSION}.zip" && \
     echo '\n\n' && \
 
