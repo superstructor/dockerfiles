@@ -471,8 +471,13 @@ RUN \
 
     echo '\n\n' && \
 
-    git clone --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.zprezto" && \
-    zsh -c 'setopt EXTENDED_GLOB && for rcfile in "${ZDOTDIR:-$HOME}"/.zprezto/runcoms/^README.md(.N); do ln -s "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}"; done' && \
+    #git clone --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.zprezto" && \
+    #zsh -c 'setopt EXTENDED_GLOB && for rcfile in "${ZDOTDIR:-$HOME}"/.zprezto/runcoms/^README.md(.N); do ln -s "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}"; done' && \
+
+    git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/.powerlevel10k && \
+    echo 'source ~/.powerlevel10k/powerlevel10k.zsh-theme' >> ~/.zshrc && \
+    echo '[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh' >> ~/.zshrc && \
+    wget -q -O /root/.p10k.zsh "${DOTFILES_BASE_URI}/.p10k.zsh" && \
 
     git clone --depth=1 https://github.com/Bash-it/bash-it.git ~/.bash_it && \
     ~/.bash_it/install.sh --silent && \
@@ -515,4 +520,4 @@ RUN \
            /var/lib/apt/lists/*
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
-CMD ["/bin/bash"]
+CMD ["/bin/zsh"]
