@@ -114,7 +114,7 @@ RUN \
     apt-get install -qq -y --no-install-recommends \
       git git-lfs diffstat jq silversearcher-ag fzf \
       neofetch ncdu htop \
-      rlwrap tmux openssh-client mosh \
+      rlwrap less tmux openssh-client mosh \
       neovim emacs-nox \
       zsh build-essential openjdk-$JVM_VERSION\-jdk-headless nodejs yarn python2 python3-pip planck \
       pngnq pngquant pngtools pngmeta pngcrush pngcheck \
