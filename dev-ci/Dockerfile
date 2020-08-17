@@ -198,6 +198,12 @@ RUN \
     pip3 -q install pytest && \
     echo '\n\n' && \
 
+    # Install flake8
+    # Ref: https://gitlab.com/pycqa/flake8
+    echo "Installing flake8..." && \
+    pip3 -q install flake8 && \
+    echo '\n\n' && \
+
     # Install Heroku Command Line Interface (CLI)
     # Ref: https://devcenter.heroku.com/articles/heroku-cli#download-and-install
     curl https://cli-assets.heroku.com/install.sh | bash && \
