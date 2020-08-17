@@ -111,7 +111,7 @@ RUN \
 
     # Install development tooling, common editors and language runtimes.
     apt-get install -qq -y --no-install-recommends \
-      git git-lfs diffstat jq silversearcher-ag \
+      git git-lfs diffstat jq silversearcher-ag fzf \
       neofetch ncdu htop \
       rlwrap tmux openssh-client mosh \
       neovim emacs-nox \
